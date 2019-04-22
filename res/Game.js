@@ -98,7 +98,7 @@ function Game_View() {
     container.appendChild(box);
     container.appendChild(events);
     document.querySelector(this.querySelector).innerHTML += container.outerHTML;
-    
+
     // Innings
     for (var i = 1; i <= Config.INNING_COUNT; i++) {
       this.addInning(i);
@@ -185,7 +185,7 @@ function Base_Path() {
     this.bases['3'] = this.bases['3'] || (this.bases['2'] && this.bases['1']);
     this.bases['2'] = this.bases['2'] || this.bases['1'];
     this.bases['1'] = true;
-    return {outs: 0, runs: 1, hits: 0, description: "Walk"};
+    return {outs: 0, runs: 0, hits: 0, description: "Walk"};
   }
 
   this.single = function() {
@@ -265,28 +265,72 @@ function Base_Path() {
   this.out = function() {
     var type = Config.OUT_TYPES[Math.floor(Math.random() * Config.OUT_TYPES.length)];
     var description = "";
+    var run_count = 0;
+    var hit_count = 0;
+    var out_count = 1;
+    var out_style = Math.random();
     if (type == Config.OUT_GROUND) {
+      description = "Ground Out";
+      if (this.getBaseRunners() > 0) {
+        if (out_style < 0.8) {
+          // Out, standard
+        } else if (out_style < 0.9) {
+          // Double play. Two outs, removing the batter and one runner. Option to advance
+          var behavior = this.walk();
+          this.bases['1'] = false;
+          if (this.bases['2']) {
+            this.bases['2'] = false;
+          } else if (this.bases['3']) {
+            this.bases['3'] = false;
+          }
+          out_count = 2;
+          description += " into Double Play.";
+          run_count = behavior.runs;
+          description += " Runners Advance.";
+          if (run_count > 0) {
+            description += " " + run_count + "Scored";
+          }
+        } else {
+          // Sacrifice. Everybody advances one, but the runner on first is cleared
+          var behavior = this.single();
+          this.bases['1'] = false;
+          run_count = behavior.runs;
+          description += ", Advancing runners.";
+          if (run_count > 0) {
+            description += " " + run_count + "Scored";
+          }
+        }
+      }
       /*
       Ground outs can manifest as:
-      Out, no runners advance
-      Double Play, removing one runner and the batter
-      Sacrifice, advancing 1 but clearing
+      Out, no runners advance (100% when getBaseRunners is 0), (80% when greater than 0)
+      Double Play, removing one runner and the batter (10% when greater than 0)
+      Sacrifice, advancing 1 but clearing the batter from first (10% when greater than 0)
+
       */
-      description = "Ground Out";
     } else if (type == Config.OUT_FLY) {
+      description = "Fly Out";
+      if (this.getBaseRunners() > 0 && out_style > 0.8) {
+        var behavior = this.single();
+        this.bases['1'] = false;
+        run_count = behavior.runs;
+        description += ", Advancing runners.";
+        if (run_count > 0) {
+          description += " " + run_count + " Scored";
+        }
+      }
       /*
       Fly outs can manifest as:
       Out, no runners advance
       Out, but runners advance
       */
-      description = "Fly Out";
     } else if (type == Config.OUT_STRIKE) {
       /*
       Nothing changes in basepath
       */
       description = "Struck Out";
     }
-    return {outs: 1, runs: 0, hits: 0, description: description};
+    return {outs: out_count, runs: run_count, hits: hit_count, description: description};
   }
 
   this.play = function(type) {
