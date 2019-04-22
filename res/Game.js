@@ -225,7 +225,7 @@ function Base_Path() {
     // '1' scores 25% of the time, goes to 3rd 75%
     // Batter goes to second
     var run_count = this.bases['3'] ? 1 : 0;
-    this.bases['1'] = false;
+    this.bases['3'] = false;
     run_count += this.bases['2'] ? 1 : 0;
     this.bases['2'] = false;
     if (Math.random() > 0.75) {
