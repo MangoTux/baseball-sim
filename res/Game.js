@@ -188,7 +188,10 @@ function Base_Path() {
     return {outs: 0, runs: 0, hits: 0, description: "Walk"};
   }
 
-  this.single = function() {
+  this.single = function(quick_advance) {
+    if (quick_advance == undefined) {
+      quick_advance = true;
+    }
     // '3' always scores
     // '2' scores 50% of the time, goes to 3rd 50%
     // '1' depends on 2:
@@ -196,7 +199,7 @@ function Base_Path() {
     // - '2' on '2' to '3'
     var run_count = this.bases['3'] ? 1 : 0;
     this.bases['3'] = false;
-    if (Math.random() > 0.5) {
+    if (quick_advance && Math.random() > 0.5) {
       run_count += this.bases['2'] ? 1 : 0;
       this.bases['2'] = false;
       if (Math.random() > 0.5) {
@@ -276,7 +279,7 @@ function Base_Path() {
           // Out, standard
         } else if (out_style < 0.9) {
           // Double play. Two outs, removing the batter and one runner. Option to advance
-          var behavior = this.walk();
+          var behavior = this.single(false);
           this.bases['1'] = false;
           if (this.bases['2']) {
             this.bases['2'] = false;
@@ -292,10 +295,10 @@ function Base_Path() {
           }
         } else {
           // Sacrifice. Everybody advances one, but the runner on first is cleared
-          var behavior = this.single();
+          var behavior = this.single(false);
           this.bases['1'] = false;
           run_count = behavior.runs;
-          description += ", Advancing runners.";
+          description += ", Advancing runners";
           if (run_count > 0) {
             description += " " + run_count + "Scored";
           }
