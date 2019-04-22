@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <script src="res/Config.js"></script>
+    <script src="res/Util.js"></script>
+    <script src="res/Team.js"></script>
+    <script src="res/Game.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/style.css"></link>
+    <style>
+    </style>
+  </head>
+  <body>
+    <!-- The game will render here -->
+    <div class="gameWindow"></div>
+  <body>
+  <script type="text/javascript">
+    var league = new League();
+    function run() {
+      var daily_matchups = league.getMatchups();
+      for (var i in daily_matchups) {
+        var game = new Game();
+        game.setup(daily_matchups[i]["away"], daily_matchups[i]["home"]);
+        game.play();
+      }
+    }
+    run();
+  </script>
+</html>
