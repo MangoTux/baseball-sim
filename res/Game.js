@@ -445,6 +445,7 @@ function Game() {
         break;
       }
       if (this.current_inning >= 9 && box_index == "home" && this.box_score.home.getScore() > this.box_score.away.getScore()) {
+        this.events.post(batting, "Ended the game by scoring");
         break;
       }
 
