@@ -156,7 +156,7 @@ function Game_View() {
       content = event_log[i];
       item = document.createElement("LI");
       item.textContent = content;
-      if ((content.includes("INNING") || content.includes("scoring"))) {
+      if ((content.includes("INNING") || content.includes("scoring")) && Config.POST_REPORTING < Config.POST_REPORTING_NONE) {
         event_list.appendChild(item.cloneNode(true));
       } else if (!(content.includes(" Out")) && Config.POST_REPORTING < Config.POST_REPORTING_HIGH) {
         event_list.appendChild(item.cloneNode(true));
@@ -442,6 +442,9 @@ function Game() {
       this.events.post(batting, response.description + "; " + base_path.getRunnerDescription());
       outs += response.outs;
       if (outs >= Config.REQUIRED_OUTS) {
+        break;
+      }
+      if (this.current_inning >= 9 && box_index == "home" && this.box_score.home.getScore() > this.box_score.away.getScore()) {
         break;
       }
 
