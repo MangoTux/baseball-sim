@@ -336,12 +336,28 @@ function Base_Path() {
     return {outs: out_count, runs: run_count, hits: hit_count, description: description};
   }
 
-  this.play = function(type) {
+  this.play = async function(type) {
     // Switchboard for plays.
-    if (typeof this[type] === "function") {
-      return this[type]();
+    if (typeof this[type] !== "function") {
+      return { error: "Play ["+type+"] doesn't exist" };
     }
-    return { error: "Play ["+type+"] doesn't exist" };
+    /*
+    If the game is in real time, i.e. you can follow the plays as the game goes along,
+    then create a randomly-delayed promise that will bubble back up to inning, so the entire game isn't completed
+    before the first inning has had a chance to run through 3 outs.
+    I'm using Promises (an entirely new concept to me) as opposed to a basic setTimeout, as that would lock the page.
+    This is fine as long as there is only one game and no other interactive component, but starts to become unfeasible
+    very quickly.
+    */
+    let play_time = 0;
+    if (Config.REAL_TIME) {
+      play_time = 1000 + Math.floor(Math.random() * 1000);
+    }
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(this[type]())
+      }, play_time)
+    });
   }
 
   this.getBaseRunners = function() {
@@ -384,6 +400,7 @@ function Game() {
   this.team_away = null;
   this.team_home = null;
   this.current_inning = 0;
+  this.is_real_time = false;
   this.box_score = {
     home: new Box_Score(),
     away: new Box_Score()
@@ -391,6 +408,10 @@ function Game() {
 
   this.game_view = new Game_View();
   this.events = new Event();
+
+  this.setRealTime = function(is_real_time) {
+    this.is_real_time = is_real_time;
+  }
 
   this.setup = function(away, home) {
     this.team_away = away;
@@ -403,7 +424,7 @@ function Game() {
   This event system is kind of messy.
   TODO Incorporate fielding and batting stats to provide a more dynamic value
   */
-  this.half_inning = function(batting, fielding) {
+  this.half_inning = async function(batting, fielding) {
     var box_index;
     if (this.team_home == batting) {
       box_index = "home";
@@ -438,7 +459,9 @@ function Game() {
           }
         }
       }
-      response = base_path.play(event_type);
+      response = await base_path.play(event_type);
+      this.game_view.redraw(this.box_score.away, this.box_score.home);
+      this.game_view.showEvents(this.events.event_log);
       this.events.post(batting, response.description + "; " + base_path.getRunnerDescription());
       outs += response.outs;
       if (outs >= Config.REQUIRED_OUTS) {
@@ -456,32 +479,29 @@ function Game() {
     } while (true);
   }
 
-  this.inning = function() {
+  this.inning = async function() {
     // Increment the current inning
     this.current_inning++;
     // Assign home team as fielding and away team as batting
     // Half inning
     this.events.post(null, "INNING " + this.current_inning);
-    this.half_inning(this.team_away, this.team_home);
-    this.game_view.redraw(this.box_score.away, this.box_score.home);
+    await this.half_inning(this.team_away, this.team_home);
     // Assign away team as fielding and home team as batting
     // Half inning
     if (this.current_inning >= Config.INNING_COUNT && this.box_score.home.getScore() > this.box_score.away.getScore()) {
       // No need to play bottom half of an inning if the home team is winning and the game would be over after they play.
       return true;
     }
-    this.half_inning(this.team_home, this.team_away);
-    this.game_view.redraw(this.box_score.away, this.box_score.home);
+    await this.half_inning(this.team_home, this.team_away);
 
     return (this.current_inning >= Config.INNING_COUNT && this.box_score.home.getScore() != this.box_score.away.getScore());
   }
 
-  this.play = function() {
+  this.play = async function() {
     var game_finished = false;
     do {
-      game_finished = this.inning();
+      game_finished = await this.inning();
     } while (!game_finished);
     /* TODO post the victor to update records */
-    this.game_view.showEvents(this.events.event_log);
   }
 }

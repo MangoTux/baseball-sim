@@ -14,7 +14,8 @@
   <body>
   <script type="text/javascript">
     var league = new League();
-    function run() {
+
+    function gameday() {
       var daily_matchups = league.getMatchups();
       for (var i in daily_matchups) {
         var game = new Game();
@@ -22,6 +23,7 @@
         game.play();
       }
     }
-    run();
+
+    gameday();
   </script>
 </html>

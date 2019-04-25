@@ -16,6 +16,7 @@ var Config = {
   POST_REPORTING_MEDIUM: 1,
   POST_REPORTING_HIGH: 2,
   POST_REPORTING_NONE: 3,
+  REAL_TIME: true,
 };
 
 Config.OUT_TYPES = [Config.OUT_STRIKE, Config.OUT_GROUND, Config.OUT_FLY];
