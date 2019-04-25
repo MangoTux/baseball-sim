@@ -20,4 +20,4 @@ var Config = {
 };
 
 Config.OUT_TYPES = [Config.OUT_STRIKE, Config.OUT_GROUND, Config.OUT_FLY];
-Config.POST_REPORTING = Config.POST_REPORTING_MEDIUM;
+Config.POST_REPORTING = Config.POST_REPORTING_LOW;

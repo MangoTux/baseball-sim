@@ -11,10 +11,10 @@ function League() {
   this.team_list = [
     new Team("Rolling Green", "Ragamuffins", "#0E3386", "#FFF"),
     new Team("Streamsong", "Scalliwags", "#FD5A1E", "#FFF"),
-    new Team("Pinewood", "Pigeonholers", "#003831", "#EFB21E"),
-    new Team("Diamond Ridge", "Dirigibles", "#FDB827", "#27251F"),
-    new Team("Gold Coast", "Glockenspiels", "#005C5C", "#C4CED4"),
-    new Team("Acadian Hills", "Axolotls", "#773141", "#FFB612"),
+    // new Team("Pinewood", "Pigeonholers", "#003831", "#EFB21E"),
+    // new Team("Diamond Ridge", "Dirigibles", "#FDB827", "#27251F"),
+    // new Team("Gold Coast", "Glockenspiels", "#005C5C", "#C4CED4"),
+    // new Team("Acadian Hills", "Axolotls", "#773141", "#FFB612"),
   ];
 
   /*

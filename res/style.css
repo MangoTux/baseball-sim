@@ -1,20 +1,103 @@
-table {
+.game {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.boxscore {
   width: 100%;
   margin: 25px 0;
 }
-table .boxscore-header td {
+.boxscore .boxscore-header td {
   font-weight: bold;
 }
-table, td {
+.boxscore, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
-table td.boxscore-cell {
+.boxscore td.boxscore-cell {
   width:6%;
 }
-table td.boxscore-cell.name {
+.boxscore td.boxscore-cell.name {
   width: 25%;
 }
 td.boxscore-cell.inning, td.boxscore-cell.runs, td.boxscore-cell.hits {
   text-align: center;
+}
+
+.events {
+  width: 85%;
+  height: 30%;
+  background: #eee;
+  overflow-y:scroll;
+}
+
+.batting {
+  width:14%;
+  height: 30%;
+  background:#eee;
+}
+
+.batting .base-list {
+  list-style: none;
+  position: absolute;
+}
+
+.batting .base {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border: 1px solid #9f9f9f;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.batting .base.active {
+  background-color: #f0ac00;
+  border: 1px solid #f0ac00;
+}
+.batting .base.first {
+  top: 25px;
+  left: 35px;
+}
+.batting .base.second {
+  top: -20px;
+  left: 15px;
+}
+.batting .base.third {
+  top: -23px;
+  left: -5px;
+}
+
+.batting .out-list {
+  line-height:10px;
+  margin-left:30px;
+  margin-top:100px;
+}
+.batting .out-list>div {
+  display: inline-block;
+}
+.batting .out-list .title {
+  width: 10px;
+  height: 13px;
+  vertical-align:top;
+}
+.batting .out-list .out {
+  border: 1px solid #d23d33;
+  margin: 1px;
+  width: 8px;
+  height: 8px;
+  -webkit-border-radius: 8px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 8px;
+  -moz-background-clip: padding;
+  border-radius: 8px;
+  background-clip: padding-box;
+}
+.batting .out-list .out.active {
+  background-color: #d23d33;
 }
