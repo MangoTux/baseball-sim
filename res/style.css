@@ -1,3 +1,43 @@
+* {
+  font-family: "Arial";
+}
+
+.toggler {
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  height:100vh;
+  width:1%;
+  margin:25px 4px;
+  background-color:#eee;
+  cursor:pointer;
+}
+
+.container {
+  width: 100%;
+  margin: auto;
+}
+.container>* {
+  float:left;
+}
+.gameWindow {
+  width: 68%;
+}
+.gameWindow .overview {
+  background-color: #eee;
+  width:100%;
+}
+.standings {
+  width: 68%;
+  margin: 25px 0;
+}
+.standings .division {
+  width: 100%;
+}
+.standings .division td {
+  width: 11%;
+}
+
 .game {
   display: flex;
   flex-flow: row wrap;
@@ -11,7 +51,7 @@
 .boxscore .boxscore-header td {
   font-weight: bold;
 }
-.boxscore, td {
+.boxscore, table, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
@@ -19,7 +59,7 @@
   width:6%;
 }
 .boxscore td.boxscore-cell.name {
-  width: 25%;
+  width: 20%;
 }
 td.boxscore-cell.inning, td.boxscore-cell.runs, td.boxscore-cell.hits {
   text-align: center;
@@ -27,14 +67,20 @@ td.boxscore-cell.inning, td.boxscore-cell.runs, td.boxscore-cell.hits {
 
 .events {
   width: 85%;
-  height: 30%;
+  height: 200px;
   background: #eee;
   overflow-y:scroll;
+  font-size:.8em;
+}
+
+.events ul {
+  list-style: none;
+  padding-left:5px
 }
 
 .batting {
   width:14%;
-  height: 30%;
+  height: 200px;
   background:#eee;
 }
 
@@ -62,20 +108,20 @@ td.boxscore-cell.inning, td.boxscore-cell.runs, td.boxscore-cell.hits {
 }
 .batting .base.first {
   top: 25px;
-  left: 35px;
+  left: 9px;
 }
 .batting .base.second {
   top: -20px;
-  left: 15px;
+  left: -11px;
 }
 .batting .base.third {
   top: -23px;
-  left: -5px;
+  left: -31px;
 }
 
 .batting .out-list {
   line-height:10px;
-  margin-left:30px;
+  margin-left:5px;
   margin-top:100px;
 }
 .batting .out-list>div {
@@ -100,4 +146,47 @@ td.boxscore-cell.inning, td.boxscore-cell.runs, td.boxscore-cell.hits {
 }
 .batting .out-list .out.active {
   background-color: #d23d33;
+}
+.inning-info {
+  margin-left:5px;
+  margin-top: 10px;
+}
+.collapsed {
+  width: 30%;
+}
+.collapsed.gameWindow .inning,
+.collapsed.standings .streak,
+.collapsed.standings .runs_scored,
+.collapsed.standings .runs_allowed,
+.collapsed.standings .run_differential,
+.collapsed.gameWindow .base-list {
+  display:none;
+}
+.collapsed.gameWindow .out-list {
+  margin-top: 5px;
+}
+.toggler.flipped {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+}
+
+.next_day {
+  background-color: #008CBA;
+  border:none;
+  color: white;
+  padding:15px 32px;
+  text-align:center;
+  text-decoration:none;
+  display:inline-block;
+  font-size:16px;
+  cursor:pointer;
+  width: 100%;
+  margin-top: 20px;
+}
+.next_day:hover {
+  top:-1;
+  background-color:#08c2ff;
 }

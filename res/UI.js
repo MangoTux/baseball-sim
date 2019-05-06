@@ -1,7 +1,87 @@
+function Season_View() {
+  // Button to move to next day
+  // Label above gameWindow to show Game [X] of Config.season_length
+  this.new_day = function(game) {
+    // Hide button to move to next day
+    // Clear game ui, except for Game [X] of Config.season_length
+    document.querySelector(Config.SELECTOR_GAME).innerHTML = "";
+    if (document.querySelector(Config.SELECTOR_NEW_DAY_BUTTON)) {
+      document.querySelector(Config.SELECTOR_NEW_DAY_BUTTON).remove();
+    }
+    document.querySelector(Config.SELECTOR_GAME).innerHTML = "<div class='overview'>" + "Game " + game + " of " + Config.SEASON_LENGTH + "</div>";
+  }
+
+  this.end_day = function() {
+    // Show button to move to next day
+    var standings_window = document.querySelector(Config.SELECTOR_STANDINGS)
+    var button = document.createElement("BUTTON");
+    button.setAttribute("onclick", "next_day()");
+    button.textContent = "New Day";
+    button.setAttribute("class", "next_day");
+    standings_window.innerHTML += button.outerHTML;
+  }
+}
+
+function Standings_View() {
+  this.draw = function(record) {
+    var columns = {
+      "wins": "W",
+      "losses": "L",
+      "percentage": "PCT",
+      "games_back": "GB",
+      "streak": "STRK",
+      "runs_scored": "RS",
+      "runs_allowed": "RA",
+      "run_differential": "RD",
+    };
+    var container = document.createElement("DIV");
+    var standings = document.createElement("TABLE");
+    standings.setAttribute("class", "division");
+    var header = document.createElement("TR");
+    header.setAttribute("class", "division-header");
+    var column = document.createElement("TD");
+    column.setAttribute("class", "name");
+    column.textContent = "";
+    header.appendChild(column.cloneNode(true));
+    for (var i in columns) {
+      column.setAttribute("class", i);
+      column.textContent = columns[i];
+      column.style["text-align"] = "center";
+      header.appendChild(column.cloneNode(true));
+    }
+    standings.appendChild(header);
+    var row;
+    for (var i = 0; i < record.length; i++) {
+      row = document.createElement("TR")
+      row.setAttribute("class", "division-team");
+      row.setAttribute("id", record[i].team_object.id);
+      column.setAttribute("class", "name");
+      column.setAttribute("title", record[i].team_object.getName());
+      column.textContent = record[i].team_object.name;
+      column.style.background = record[i].team_object.getPrimaryColor();
+      column.style.color = record[i].team_object.getTextColor();
+      column.style["text-align"] = "left";
+      row.appendChild(column.cloneNode(true));
+      column.style.background = "white";
+      column.style.color = "black";
+      for (var j in columns) {
+        column.setAttribute("class", j);
+        column.textContent = record[i][j];
+        column.style["text-align"] = "center";
+        row.appendChild(column.cloneNode(true));
+      }
+      standings.appendChild(row.cloneNode(true));
+    }
+    document.querySelector(Config.SELECTOR_STANDINGS).innerHTML = standings.outerHTML;
+  }
+
+  this.setup = function(record) {
+    this.draw(record);
+  }
+}
 
 function Game_View() {
   this.game_id = null;
-  this.querySelector = ".gameWindow";
   this.team_away = null;
   this.team_home = null;
 
@@ -66,9 +146,13 @@ function Game_View() {
       out.setAttribute("class", "out out-"+i);
       out_detail.appendChild(out.cloneNode(true));
     }
+    var inning_detail = document.createElement("DIV");
+    inning_detail.setAttribute("class", "inning-info");
+    inning_detail.textContent = "^ 1";
 
     batting.appendChild(base_list);
     batting.appendChild(out_detail);
+    batting.appendChild(inning_detail);
     // Finalize
     box.appendChild(header);
     box.appendChild(away);
@@ -76,7 +160,7 @@ function Game_View() {
     container.appendChild(box);
     container.appendChild(events);
     container.appendChild(batting);
-    document.querySelector(this.querySelector).innerHTML += container.outerHTML;
+    document.querySelector(Config.SELECTOR_GAME).innerHTML += container.outerHTML;
 
     // Innings
     for (var i = 1; i <= Config.INNING_COUNT; i++) {
@@ -172,9 +256,14 @@ function Game_View() {
     }
   }
 
+  this.inning = function(inning, half) {
+    document.querySelector("#" + this.game_id + " .inning-info").textContent = half + " " + inning;
+  }
+
   this.update = function(game) {
     this.scoreboard(game.box_score.away, game.box_score.home);
     this.events(game.events.event_log);
     this.batting(game.outs, game.base_path);
+    this.inning(game.current_inning, game.half);
   }
 }

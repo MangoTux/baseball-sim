@@ -5,25 +5,33 @@
     <script src="res/Team.js"></script>
     <script src="res/Game.js"></script>
     <script src="res/UI.js"></script>
+    <script src="res/Standings.js"></script>
+    <script src="res/Season.js"></script>
     <link rel="stylesheet" type="text/css" href="res/style.css"></link>
     <title>Baseball Simulator</title>
   </head>
   <body>
     <!-- The game will render here -->
-    <div class="gameWindow"></div>
+    <div class="container">
+      <div class="gameWindow"></div>
+      <div class="toggler" onclick="updateView()">&lt;</div>
+      <div class="standings collapsed"></div>
+    </div>
   <body>
   <script type="text/javascript">
-    var league = new League();
+    var season = new Season();
 
-    function gameday() {
-      var daily_matchups = league.getMatchups();
-      for (var i in daily_matchups) {
-        var game = new Game();
-        game.setup(daily_matchups[i]["away"], daily_matchups[i]["home"]);
-        game.play();
-      }
+    season.setup();
+
+    function updateView() {
+      document.querySelector(".gameWindow").classList.toggle("collapsed");
+      document.querySelector(".standings").classList.toggle("collapsed");
+      document.querySelector(".toggler").classList.toggle("flipped");
     }
 
-    gameday();
+    function next_day() {
+      season.gameday();
+    }
+    next_day();
   </script>
 </html>

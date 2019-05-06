@@ -276,6 +276,7 @@ function Game() {
   this.team_away = null;
   this.team_home = null;
   this.current_inning = 0;
+  this.half = "^";
   this.is_real_time = false;
   this.base_path = null;
   this.outs = 0;
@@ -306,8 +307,10 @@ function Game() {
     var box_index;
     if (this.team_home == batting) {
       box_index = "home";
+      this.half = "v";
     } else {
       box_index = "away";
+      this.half = "^";
     }
     this.box_score[box_index].initializeInning(this.current_inning);
     this.outs = 0;
@@ -379,6 +382,7 @@ function Game() {
     do {
       game_finished = await this.inning();
     } while (!game_finished);
+    return this.box_score;
     /* TODO post the victor to update records */
   }
 }
