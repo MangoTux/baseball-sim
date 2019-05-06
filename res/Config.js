@@ -21,7 +21,7 @@ var Config = {
   POST_REPORTING_HIGH: 2,
   POST_REPORTING_NONE: 3,
   REAL_TIME: true,
-  SEASON_LENGTH: 160,
+  SEASON_LENGTH: 162,
 };
 
 Config.OUT_TYPES = [Config.OUT_STRIKE, Config.OUT_GROUND, Config.OUT_FLY];
