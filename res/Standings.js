@@ -113,10 +113,13 @@ function Standings(league) {
       history = this.record[team.id].game_history;
       if (history.length == 0) { this.record[team.id].streak = "-"; continue; }
       streak_type = history[history.length - 1];
-      var last = history.length;
-      var streak = 1;
-      while (last - streak > 0 && history[last - streak] == streak_type) {
+      var index = history.length-1;
+      // Given ["W", "L", "W"]:
+      // Streak starts at one (for last game)
+      var streak = 0;
+      while (index >= 0 && history[index] == streak_type) {
         streak++;
+        index--;
       }
       this.record[team.id].streak = streak_type + streak;
     }
