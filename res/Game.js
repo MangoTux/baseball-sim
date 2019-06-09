@@ -358,6 +358,7 @@ function Game() {
         break;
       }
     } while (true);
+    this.game_view.update(this);
   }
 
   this.inning = async function() {

@@ -13,6 +13,8 @@ var Config = {
   SELECTOR_STANDINGS: ".standings",
   SELECTOR_NEW_DAY_BUTTON: ".next_day",
 
+  DIVISION_COUNT: 4,
+
   INNING_COUNT: 9,
   REQUIRED_OUTS: 3,
 

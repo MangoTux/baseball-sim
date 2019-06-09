@@ -1,5 +1,6 @@
 function Season() {
   this.league = new League();
+  this.league.initialize();
   this.standings;
 
   this.current_day = 0;

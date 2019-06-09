@@ -24,6 +24,7 @@ function Season_View() {
 
 function Standings_View() {
   this.draw = function(record) {
+    document.querySelector(Config.SELECTOR_STANDINGS).innerHTML ="";
     var columns = {
       "wins": "W",
       "losses": "L",
@@ -34,45 +35,48 @@ function Standings_View() {
       "runs_allowed": "RA",
       "run_differential": "RD",
     };
-    var container = document.createElement("DIV");
-    var standings = document.createElement("TABLE");
-    standings.setAttribute("class", "division");
-    var header = document.createElement("TR");
-    header.setAttribute("class", "division-header");
-    var column = document.createElement("TD");
-    column.setAttribute("class", "name");
-    column.textContent = "";
-    header.appendChild(column.cloneNode(true));
-    for (var i in columns) {
-      column.setAttribute("class", i);
-      column.textContent = columns[i];
-      column.style["text-align"] = "center";
-      header.appendChild(column.cloneNode(true));
-    }
-    standings.appendChild(header);
-    var row;
-    for (var i = 0; i < record.length; i++) {
-      row = document.createElement("TR")
-      row.setAttribute("class", "division-team");
-      row.setAttribute("id", record[i].team_object.id);
+    for (var i = 0; i < Config.DIVISION_COUNT; i++) {
+      var container = document.createElement("DIV");
+      var standings = document.createElement("TABLE");
+      standings.setAttribute("class", "division");
+      var header = document.createElement("TR");
+      header.setAttribute("class", "division-header");
+      var column = document.createElement("TD");
       column.setAttribute("class", "name");
-      column.setAttribute("title", record[i].team_object.getName());
-      column.textContent = record[i].team_object.name;
-      column.style.background = record[i].team_object.getPrimaryColor();
-      column.style.color = record[i].team_object.getTextColor();
-      column.style["text-align"] = "left";
-      row.appendChild(column.cloneNode(true));
-      column.style.background = "white";
-      column.style.color = "black";
+      column.textContent = "Division " + (i+1);
+      header.appendChild(column.cloneNode(true));
       for (var j in columns) {
         column.setAttribute("class", j);
-        column.textContent = record[i][j];
+        column.textContent = columns[j];
         column.style["text-align"] = "center";
-        row.appendChild(column.cloneNode(true));
+        header.appendChild(column.cloneNode(true));
       }
-      standings.appendChild(row.cloneNode(true));
+      standings.appendChild(header);
+      var row;
+      for (var j = 0; j < record[i].length; j++) {
+        row = document.createElement("TR")
+        row.setAttribute("class", "division-team");
+        row.setAttribute("id", record[i][j].team_object.id);
+        column.setAttribute("class", "name");
+        column.setAttribute("title", record[i][j].team_object.getName());
+        column.textContent = record[i][j].team_object.name;
+        column.style.background = record[i][j].team_object.getPrimaryColor();
+        column.style.color = record[i][j].team_object.getTextColor();
+        column.style["text-align"] = "left";
+        row.appendChild(column.cloneNode(true));
+        column.style.background = "white";
+        column.style.color = "black";
+        for (var k in columns) {
+          column.setAttribute("class", k);
+          column.textContent = record[i][j][k];
+          column.style["text-align"] = "center";
+          row.appendChild(column.cloneNode(true));
+        }
+        standings.appendChild(row.cloneNode(true));
+      }
+      standings.innerHTML += "<br>";
+      document.querySelector(Config.SELECTOR_STANDINGS).innerHTML += standings.outerHTML;
     }
-    document.querySelector(Config.SELECTOR_STANDINGS).innerHTML = standings.outerHTML;
   }
 
   this.setup = function(record) {
