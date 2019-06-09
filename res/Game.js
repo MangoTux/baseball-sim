@@ -153,7 +153,7 @@ function Base_Path() {
       if (this.getBaseRunners() > 0) {
         if (out_style < 0.8) {
           // Out, standard
-        } else if (out_style < 0.9) {
+        } else if (out_style < 0.9 && this.outs < Config.REQUIRED_OUTS-1) {
           // Double play. Two outs, removing the batter and one runner. Option to advance
           var behavior = this.single(false);
           this.bases['1'] = false;
@@ -189,7 +189,7 @@ function Base_Path() {
       */
     } else if (type == Config.OUT_FLY) {
       description = "Fly Out";
-      if (this.getBaseRunners() > 0 && out_style > 0.8) {
+      if (this.getBaseRunners() > 0 && out_style > 0.8 && this.outs < Config.REQUIRED_OUTS) {
         var behavior = this.single();
         this.bases['1'] = false;
         run_count = behavior.runs;
@@ -212,7 +212,8 @@ function Base_Path() {
     return {outs: out_count, runs: run_count, hits: hit_count, description: description};
   }
 
-  this.play = async function(type) {
+  this.play = async function(type, outs) {
+    this.outs = outs;
     // Switchboard for plays.
     if (typeof this[type] !== "function") {
       return { error: "Play ["+type+"] doesn't exist" };
@@ -340,21 +341,21 @@ function Game() {
           }
         }
       }
-      response = await this.base_path.play(event_type);
+      response = await this.base_path.play(event_type, this.outs);
       this.events.post(batting, response.description + "; " + this.base_path.getRunnerDescription());
       this.outs += response.outs;
       this.game_view.update(this);
       if (this.outs >= Config.REQUIRED_OUTS) {
         break;
       }
-      if (this.current_inning >= 9 && box_index == "home" && this.box_score.home.getScore() > this.box_score.away.getScore()) {
-        this.events.post(batting, "Ended the game by scoring");
-        break;
-      }
 
       this.box_score[box_index].addRuns(this.current_inning, response.runs);
       if (response.hits) {
         this.box_score[box_index].addHit(this.current_inning);
+      }
+      if (this.current_inning >= Config.INNING_COUNT && box_index == "home" && this.box_score.home.getScore() > this.box_score.away.getScore()) {
+        this.events.post(batting, "Ended the game by scoring");
+        break;
       }
     } while (true);
   }
