@@ -1,37 +1,30 @@
 <html>
   <head>
-    <script src="res/Config.js"></script>
-    <script src="res/Util.js"></script>
-    <script src="res/Team.js"></script>
-    <script src="res/Game.js"></script>
-    <script src="res/UI.js"></script>
-    <script src="res/Standings.js"></script>
-    <script src="res/Season.js"></script>
-    <link rel="stylesheet" type="text/css" href="res/style.css"></link>
-    <title>Baseball Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script type="module" src="js/baseball.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Baseball Sim</title>
   </head>
   <body>
-    <!-- The game will render here -->
-    <div class="container">
-      <div class="gameWindow"></div>
-      <div class="toggler" onclick="updateView()">&lt;</div>
-      <div class="standings collapsed"></div>
+    <div id="settings_config" style="display:none" aria-hidden="true">
+      <input id="required_outs" value=3 />
     </div>
-  <body>
-  <script type="text/javascript">
-    var season = new Season();
-
-    season.setup();
-
-    function updateView() {
-      document.querySelector(".gameWindow").classList.toggle("collapsed");
-      document.querySelector(".standings").classList.toggle("collapsed");
-      document.querySelector(".toggler").classList.toggle("flipped");
-    }
-
-    function next_day() {
-      season.gameday();
-    }
-    next_day();
-  </script>
+    <div id="container_controls">
+      <button id="drilldown_collapse">&gt;&gt;</button>
+      <!-- Next Day, Settings -->
+      <div id="day_ticker">
+        <button id="new_day" class="hidden">Next Day</button>
+      </div>
+    </div>
+    <div id="full_display" class="collapse">
+      <div id="container_gameday">
+      </div>
+      <div id="container_drilldown">
+        <div id="container_team">
+        </div>
+        <div id="container_standings">
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

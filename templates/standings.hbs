@@ -1,0 +1,34 @@
+<div class="standings-table drilldown-table {{#if collapse}}collapse{{/if}}">
+{{#each record as | division |}}
+  <table class="division">
+    <thead>
+      <tr class="division-header">
+        <th class="name">{{@key}}</th>
+        <th class="wins">W</th>
+        <th class="losses">L</th>
+        <th class="percentage">PCT</th>
+        <th class="games_back">GB</th>
+        <th class="streak collapsible">STRK</th>
+        <th class="runs_scored collapsible">RS</th>
+        <th class="runs_allowed collapsible">RA</th>
+        <th class="run_differential collapsible">RD</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each division.team_list as | team |}}
+    <tr>
+      <td class="clickable_team_id" data-id="{{team.team_object.id}}">{{team_name team.team_object}}</td>
+      <td>{{team.wins}}</td>
+      <td>{{team.losses}}</td>
+      <td>{{team.percentage}}</td>
+      <td>{{team.games_back}}</td>
+      <td class="collapsible">{{team.streak}}</td>
+      <td class="collapsible">{{team.runs_scored}}</td>
+      <td class="collapsible">{{team.runs_allowed}}</td>
+      <td class="collapsible">{{team.run_differential}}</td>
+    </tr>
+    {{/each}}
+    </tbody>
+  </table>
+{{/each}}
+</div>

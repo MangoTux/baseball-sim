@@ -1,0 +1,70 @@
+{{#with game as | game |}}
+<br>
+<table class="boxscore">
+  <thead>
+    <tr>
+      <th></th>
+      {{#inning_iter game}}
+      <td>{{this}}</td>
+      {{/inning_iter}}
+      <th>R</th>
+      <th>H</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="team-away">
+      <td class="team-name boxscore-cell" style="{{team_style game.team_away}}">{{team_name game.team_away}}</td>
+      {{#inning_iter game}}
+      <td class="inning boxscore-cell">{{inning_runs game "away" this}}</td>
+      {{/inning_iter}}
+      <td class="boxscore-cell">{{total_game game "away" "score"}}</td>
+      <td class="boxscore-cell">{{total_game game "away" "hits"}}</td>
+    </tr>
+    <tr class="team-home">
+      <td class="team-name boxscore-cell" style="{{team_style game.team_home}}">{{team_name game.team_home}}</td>
+      {{#inning_iter game}}
+      <td class="inning boxscore-cell">{{inning_runs game "home" this}}</td>
+      {{/inning_iter}}
+      <td class="boxscore-cell">{{total_game game "home" "score"}}</td>
+      <td class="boxscore-cell">{{total_game game "home" "hits"}}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="game-detail">
+  {{#unless game.is_finished}}
+  <!-- Bases -->
+  <ul class="base-list">
+    <li class="base first {{game_base game 1}}"></li>
+    <li class="base second {{game_base game 2}}"></li>
+    <li class="base third {{game_base game 3}}"></li>
+  </ul>
+  <!-- Outs -->
+  <div class="out-list">
+    <div class="out {{game_outs game 1}}"></div>
+    <div class="out {{game_outs game 2}}"></div>
+    <div class="out {{game_outs game 3}}"></div>
+  </div>
+  {{/unless}}
+</div>
+<div class="game-events">
+  <ul>
+  {{#each game.events.event_log as | inning |}}
+    <li>
+      Inning {{@key}}
+      <ul>
+        {{#each inning as | side |}}
+        <li>
+          {{side.name}}
+          <ul>
+            {{#each side.events as | event |}}
+            <li>{{event.name}}: {{event.description}}</li>
+            {{/each}}
+          </ul>
+        </li>
+        {{/each}}
+      </ul>
+    </li>
+  {{/each}}
+  </ul>
+</div>
+{{/with}}
