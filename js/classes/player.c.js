@@ -51,6 +51,36 @@ export class Player {
     }
   }
 
+  calculateCareerBattingHistory() {
+    if (this.career_history.at_bat == 0) {
+      this.career_history.average = "-";
+    } else {
+      this.career_history.average = (this.career_history.hits / this.career_history.at_bat).toFixed(3);
+    }
+    this.career_history.obp = this.obp.toFixed(3);
+    this.career_history.slg = this.slg.toFixed(3);
+    this.career_history.obs = this.obs.toFixed(3);
+  }
+
+  calculateCareerPitchingHistory() {
+    /*
+    runs
+    */
+    this.pitching_history = {
+      innings_pitched: 0,
+      era: 0,
+      runs_allowed: 0,
+      home_runs: 0,
+      hb: 0,
+      walks: 0,
+      strikeouts: 0,
+    };
+
+    this.pitching_history.whip = this.whip.toFixed(3);
+    this.pitching_history.average = 0; // Hits divided by at bats
+    this.era = (this.runs_allowed / this.pitching_history.innings_pitched).toFixed(3);
+  }
+
   calculateCareerHistory() {
     // Aggregate all values in game_history
     let career_history = this.stat_template;
@@ -59,16 +89,11 @@ export class Player {
         career_history[key] += stats[key];
       }
     }
-    // After aggregate
     this.career_history = career_history;
-    if (career_history.at_bat == 0) {
-      this.career_history.average = "-";
-    } else {
-      this.career_history.average = (career_history.hits / career_history.at_bat).toFixed(3);
+    this.calculateCareerBattingHistory();
+    if (this.position.symbol == "P") {
+      this.calculateCareerPitchingHistory();
     }
-    this.career_history.obp = this.obp.toFixed(3);
-    this.career_history.slg = this.slg.toFixed(3);
-    this.career_history.obs = this.obs.toFixed(3);
   }
 
   register(game_id, event, delta) {

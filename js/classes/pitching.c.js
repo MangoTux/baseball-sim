@@ -15,7 +15,7 @@ export class Pitching {
   */
   getZoneLocation() {
     // Chance to modify this based on other stats
-    let accuracy_threshold = 9;
+    let accuracy_threshold = 8;
     // Batter makes an intimidation check against the pitcher's resolve
     let accuracy_hit = dice(1, this.pitcher.stats.pressure) * (this.isIntimidating() ? 1 : 0);
     let accuracy_mod = Math.floor((this.pitcher.stats.pitching_accuracy - 10) / 2) - accuracy_hit;
@@ -77,7 +77,8 @@ export class Pitching {
         continue;
       } else if (!contact && zone_location == "ball") {
         let side = ["L", "R", "U", "D"][dice(0, 3)];
-        if (this.batter.hand == (side == 1 ) && dice(1, 20) <= 2) {
+        if (this.batter.hand == (side == 1 ) && dice(1, 5) <= 2) {
+          console.log("Hit by pitch");
           return "hbp";
         }
         pitch_count.balls++;

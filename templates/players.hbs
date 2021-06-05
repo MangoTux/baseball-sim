@@ -1,0 +1,38 @@
+<div class="team-table drilldown-table {{#if collapse}}collapse{{/if}}">
+  <table class="player">
+    <thead>
+      <tr class="team-header">
+        <th class="name">{{name}}</th>
+        <th class="position">Pos</th>
+        <th class="at_bats collapsible">AB</th>
+        <th class="runs collapsible">R</th>
+        <th class="hits collapsible">H</th>
+        <th class="home_runs collapsible">HR</th>
+        <th class="runs_batted_in collapsible">RBI</th>
+        <th class="walks collapsible">BB</th>
+        <th class="strikeouts collapsible">SO</th>
+        <th class="average">AVG</th>
+        <th class="obp collapsible">OBP</th>
+        <th class="slg collapsible">SLG</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#each all as | member |}}
+      <tr>
+        <td>{{member.name}}</td>
+        <td>{{member.position}}</td>
+        <td class="collapsible">{{member.career_history.at_bat}}</td>
+        <td class="collapsible">{{member.career_history.runs}}</td>
+        <td class="collapsible">{{member.career_history.hits}}</td>
+        <td class="collapsible">{{member.career_history.home_runs}}</td>
+        <td class="collapsible">{{member.career_history.runs_batted_in}}</td>
+        <td class="collapsible">{{member.career_history.walks}}</td>
+        <td class="collapsible">{{member.career_history.strikeouts}}</td>
+        <td>{{member.career_history.average}}</td>
+        <td class="collapsible">{{member.career_history.obp}}</td>
+        <td class="collapsible">{{member.career_history.slg}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>

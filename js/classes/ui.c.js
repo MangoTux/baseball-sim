@@ -6,6 +6,8 @@ export class UI {
     this.selector = {
       standings: "#container_standings",
       team: "#container_team",
+      players: "#container_players",
+      pitchers: "#container_pitchers",
       gameday: "#container_gameday",
       day: "#day_ticker",
     }
@@ -33,6 +35,16 @@ export class UI {
       template_url: this.directory + "templates/day_ticker.hbs?v=" + cache_bust(),
       template: null,
       active: true,
+    };
+    this.players = {
+      template_url: this.directory + "templates/players.hbs?v=" + cache_bust(),
+      template: null,
+      active: false,
+    };
+    this.pitchers = {
+      template_url: this.directory + "templates/pitchers.hbs?v=" + cache_bust(),
+      template: null,
+      active: false,
     };
     this.collapse = true;
     this.current_data = null;
@@ -86,7 +98,7 @@ export class UI {
   }
 
   async loadTemplates() {
-    const modules = ["standings", "team", "gameday", "day", "game"];
+    const modules = ["standings", "team", "gameday", "day", "game", "players", "pitchers"];
     for (let module of modules) {
       await fetch(this[module].template_url)
         .then(response => response.ok ? Promise.resolve(response) : Promise.reject(new Error(response.statusText)))
@@ -162,6 +174,9 @@ export class UI {
           if ([game.team_home.id, game.team_away.id].includes(this.team.id)) {
             this.drawTeam();
           }
+        } else {
+          this.drawPitchers();
+          this.drawPlayers();
         }
       } else if (update.type == "standings") {
         this.drawStandings();
@@ -231,6 +246,32 @@ export class UI {
     document.querySelector(this.selector.team).innerHTML = this.team.template(data);
   }
 
+  drawPlayers() {
+    if (!this.players.active) {
+      document.querySelector(this.selector.players).innerHTML = "";
+      return;
+    }
+    if (this.players.template == null || this.players.id == null) {
+      document.querySelector(this.selector.players).innerHTML = "Loading...";
+      return;
+    }
+
+    // Get players from all teams and sort stats
+  }
+
+  drawPitchers() {
+    if (!this.pitchers.active) {
+      document.querySelector(this.selector.pitchers).innerHTML = "";
+      return;
+    }
+    if (this.pitchers.template == null || this.pitchers.id == null) {
+      document.querySelector(this.selector.pitchers).innerHTML = "Loading...";
+      return;
+    }
+
+    // Get all pitchers, and assemble their stats
+  }
+
   drawGameday() {
     if (!this.gameday.active) {
       document.querySelector(this.selector.gameday).innerHTML = "";
@@ -258,6 +299,12 @@ export class UI {
     }
     const data = {
       game: this.current_data.getGameById(id),
+      alert: null,
+    }
+    if (data.game.current_inning >= 5) {
+      if (data.game.box_score.home.getHits() == 0 || data.game.box_score.away.getHits() == 0) {
+        data.alert = "No Hitter" + (data.game.is_finished ? "!" : " Alert");
+      }
     }
     let dom_object = document.querySelector(`#${id}`);
     if (dom_object == null) {
