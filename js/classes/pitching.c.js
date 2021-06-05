@@ -28,7 +28,7 @@ export class Pitching {
 
   /*
   Returns true if the batter is able to meet the accuracy DC,
-  modified by pressure of outs,
+  modified by pressure of outs, baserunners
   */
   batterDoesContact(zone) {
     let accuracy_threshold = 12;
@@ -71,13 +71,17 @@ export class Pitching {
       */
       if (!contact && zone_location == "strike") {
         pitch_count.strikes++;
-        if (pitch_count.strikes == 2) {
+        if (pitch_count.strikes == 3) {
           return "out_strike";
         }
         continue;
       } else if (!contact && zone_location == "ball") {
+        let side = ["L", "R", "U", "D"][dice(0, 3)];
+        if (this.batter.hand == (side == 1 ) && dice(1, 20) <= 2) {
+          return "hbp";
+        }
         pitch_count.balls++;
-        if (pitch_count.balls == 2) {
+        if (pitch_count.balls == 4) {
           return "walk";
         }
         continue;

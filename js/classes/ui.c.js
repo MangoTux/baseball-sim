@@ -9,27 +9,28 @@ export class UI {
       gameday: "#container_gameday",
       day: "#day_ticker",
     }
+    this.directory = ""; // On production, "/projects/baseball/"
     this.standings = {
-      template_url: "/projects/baseball/templates/standings.hbs?v=" + cache_bust(),
+      template_url: this.directory + "templates/standings.hbs?v=" + cache_bust(),
       template: null,
       active: true,
     };
     this.team = {
-      template_url: "/projects/baseball/templates/team.hbs?v=" + cache_bust(),
+      template_url: this.directory + "templates/team.hbs?v=" + cache_bust(),
       template: null,
       active: false,
     };
     this.game = {
-      template_url: "/projects/baseball/templates/boxscore.hbs?v=" + cache_bust(),
+      template_url: this.directory + "templates/boxscore.hbs?v=" + cache_bust(),
       template: null,
     };
     this.gameday = {
-      template_url: "/projects/baseball/templates/gameday.hbs?v=" + cache_bust(),
+      template_url: this.directory + "templates/gameday.hbs?v=" + cache_bust(),
       template: null,
       active: true,
     };
     this.day = {
-      template_url: "/projects/baseball/templates/day_ticker.hbs?v=" + cache_bust(),
+      template_url: this.directory + "templates/day_ticker.hbs?v=" + cache_bust(),
       template: null,
       active: true,
     };

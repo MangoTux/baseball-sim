@@ -15,6 +15,7 @@ export class Player {
 
       resolve: dice(3, 6), // (Pitchers only) resistance to intimidation
       pitching_accuracy: 6+dice(2, 6),
+      hand: dice(1, 2) == 1 ? "L" : "R",
     }
     this.game_history = {};
     this.calculateCareerHistory();

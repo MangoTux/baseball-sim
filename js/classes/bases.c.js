@@ -9,6 +9,12 @@ export class Bases {
     };
   }
 
+  hbp() {
+    let response = this.walk();
+    response.description = response.runs ? "Hit By Pitch, sending a runner home" : "Hit by pitch";
+    return response;
+  }
+
   walk() {
     if (this.getBaseRunners() == 3) {
       let scored = this.getPlayersOnBases([3]);
