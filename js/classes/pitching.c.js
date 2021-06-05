@@ -78,7 +78,6 @@ export class Pitching {
       } else if (!contact && zone_location == "ball") {
         let side = ["L", "R", "U", "D"][dice(0, 3)];
         if (this.batter.hand == (side == 1 ) && dice(1, 5) <= 2) {
-          console.log("Hit by pitch");
           return "hbp";
         }
         pitch_count.balls++;

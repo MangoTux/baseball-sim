@@ -129,6 +129,9 @@ New UI changes
   display: flex;
   justify-content: space-between;
 }
+#container_controls>button.btn-active {
+  background-color: #e0e0e0;
+}
 #container_gameday {
   grid-area: gameday;
 }

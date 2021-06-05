@@ -55,8 +55,10 @@ export class Game {
       this.base_path.startRunnerOnSecond(batting.at_bat);
     }
     let pitching = new Pitching(fielding.getPlayerByPosition("P"));
+    let pitcher = pitching.pitcher;
     do {
       let batter = batting.nextBatter();
+      pitcher.postDefenseEvent(this.id, "batter");
       // Modify stats of batter and game based on response
       // Determine current player
       // Get their stats
@@ -72,9 +74,10 @@ export class Game {
       /*
       Future consideration: Single event system, where eventlogger and batter both listen?
       */
-      batter.postEvent(this.id, event, response);
+      pitcher.postDefenseEvent(this.id, event, response);
+      batter.postOffenseEvent(this.id, event, response);
       for (let runner of response.scored) {
-        runner.postEvent(this.id, "run", 1);
+        runner.postOffenseEvent(this.id, "run", 1);
       }
       this.events.postBatter(this.current_inning, batting, batter, response.description + "; " + this.base_path.getRunnerDescription());
       this.outs += response.outs;

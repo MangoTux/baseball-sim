@@ -111,7 +111,27 @@ export class UI {
 
   setTeam(team_id) {
     this.team.active = true;
+    this.pitchers.active = false;
+    this.players.active = false;
     this.team.id = team_id;
+    this.drawPlayers();
+    this.drawPitchers();
+  }
+
+  setPlayers() {
+    this.team.active = false;
+    this.pitchers.active = false;
+    this.players.active = true;
+    this.drawPitchers();
+    this.drawTeam();
+  }
+
+  setPitchers() {
+    this.team.active = false;
+    this.players.active = false;
+    this.pitchers.active = true;
+    this.drawPlayers();
+    this.drawTeam();
   }
 
   toggleCollapse() {
@@ -240,7 +260,7 @@ export class UI {
       data.team.push({
         name: player.name,
         position: player.position.symbol,
-        career_history: player.career_history,
+        career_history: player.career_history.offense,
       });
     }
     document.querySelector(this.selector.team).innerHTML = this.team.template(data);
@@ -251,12 +271,33 @@ export class UI {
       document.querySelector(this.selector.players).innerHTML = "";
       return;
     }
-    if (this.players.template == null || this.players.id == null) {
+    if (this.players.template == null) {
       document.querySelector(this.selector.players).innerHTML = "Loading...";
       return;
     }
 
-    // Get players from all teams and sort stats
+    const data = {
+      collapse: this.collapse,
+      all: [],
+      active_sort: "average", // If it's clicked in the template, then use that
+    };
+    for (const [_, team] of Object.entries(this.current_data.league.team_list)) {
+      for (const [id, player] of Object.entries(team.player_list)) {
+        data.all.push({
+          name: player.name,
+          position: player.position.symbol,
+          team_name: team.name_abbreviation,
+          team_id: team.id,
+          career_history: player.career_history.offense,
+        });
+      }
+    }
+    if (typeof data.all[0].career_history[data.active_sort] !== "undefined") {
+      data.all.sort((a, b) => {
+        return a.career_history[data.active_sort] > b.career_history[data.active_sort] ? -1 : 1;
+      });
+    }
+    document.querySelector(this.selector.players).innerHTML = this.players.template(data);
   }
 
   drawPitchers() {
@@ -264,12 +305,34 @@ export class UI {
       document.querySelector(this.selector.pitchers).innerHTML = "";
       return;
     }
-    if (this.pitchers.template == null || this.pitchers.id == null) {
+    if (this.pitchers.template == null) {
       document.querySelector(this.selector.pitchers).innerHTML = "Loading...";
       return;
     }
 
-    // Get all pitchers, and assemble their stats
+    const data = {
+      collapse: this.collapse,
+      all: [],
+      active_sort: "era", // If it's clicked in the template, then use that
+    };
+    for (const [_, team] of Object.entries(this.current_data.league.team_list)) {
+      for (const [id, player] of Object.entries(team.player_list)) {
+        if (player.position.symbol !== "P") { continue; }
+        data.all.push({
+          name: player.name,
+          team_name: team.name_abbreviation,
+          team_id: team.id,
+          career_history: player.career_history.defense,
+        });
+      }
+    }
+    if (typeof data.all[0].career_history[data.active_sort] !== "undefined") {
+      console.log("Sorting ERA!");
+      data.all.sort((a, b) => {
+        return parseFloat(a.career_history[data.active_sort]) > parseFloat(b.career_history[data.active_sort]) ? 1 : -1;
+      });
+    }
+    document.querySelector(this.selector.pitchers).innerHTML = this.pitchers.template(data);
   }
 
   drawGameday() {

@@ -2,8 +2,7 @@
   <table class="player">
     <thead>
       <tr class="team-header">
-        <th class="name">{{name}}</th>
-        <th class="team">Team</th>
+        <th class="name">Pitcher Stats</th>
         <th class="era">ERA</th>
         <th class="innings_pitched collapsible">IP</th>
         <th class="hits">H</th>
@@ -19,18 +18,17 @@
     <tbody>
     {{#each all as | member |}}
       <tr>
-        <td>{{member.name}}</td>
-        <td>{{member.team}}</td>
+        <td class="clickable_team_id" data-id="{{member.team_id}}">{{member.name}} <small>({{member.team_name}})</small></td>
         <td>{{member.career_history.era}}</td>
-        <td class="collapsible">{{member.pitching_history.innings_pitched}}</td>
-        <td>{{member.pitching_history.hits}}</td>
-        <td class="collapsible">{{member.pitching_history.runs_allowed}}</td>
-        <td class="collapsible">{{member.pitching_history.home_runs}}</td>
-        <td class="collapsible">{{member.pitching_history.hb}}</td>
-        <td class="collapsible">{{member.pitching_history.walks}}</td>
-        <td class="collapsible">{{member.pitching_history.strikeouts}}</td>
-        <td class="collapsible">{{member.pitching_history.whip}}</td>
-        <td class="collapsible">{{member.pitching_history.avg}}</td>
+        <td class="collapsible">{{member.career_history.innings_pitched}}</td>
+        <td>{{member.career_history.hits}}</td>
+        <td class="collapsible">{{member.career_history.runs_allowed}}</td>
+        <td class="collapsible">{{member.career_history.home_runs}}</td>
+        <td class="collapsible">{{member.career_history.hb}}</td>
+        <td class="collapsible">{{member.career_history.walks}}</td>
+        <td class="collapsible">{{member.career_history.strikeouts}}</td>
+        <td class="collapsible">{{member.career_history.whip}}</td>
+        <td class="collapsible">{{member.career_history.average}}</td>
       </tr>
     {{/each}}
     </tbody>

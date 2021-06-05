@@ -25,6 +25,16 @@ document.addEventListener("click", e => {
     ui.draw(season);
     return;
   }
+  const drilldown_id_list = ["drilldown_team", "drilldown_players", "drilldown_pitchers"];
+  if (drilldown_id_list.indexOf(e.target.getAttribute('id')) > -1) {
+    let ui_function = e.target.getAttribute('data-function');
+    for (let id of drilldown_id_list) {
+      document.querySelector(`#${id}`).classList.remove('btn-active');
+    }
+    e.target.classList.add('btn-active');
+    ui[ui_function](null);
+    return;
+  }
   if (e.target.getAttribute('id') == "new_day") {
     // favicon update
     season.gameday();
