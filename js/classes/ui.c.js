@@ -124,6 +124,7 @@ export class UI {
     this.players.active = true;
     this.drawPitchers();
     this.drawTeam();
+    this.drawPlayers();
   }
 
   setPitchers() {
@@ -132,6 +133,7 @@ export class UI {
     this.pitchers.active = true;
     this.drawPlayers();
     this.drawTeam();
+    this.drawPitchers();
   }
 
   toggleCollapse() {
@@ -305,8 +307,8 @@ export class UI {
       document.querySelector(this.selector.pitchers).innerHTML = "";
       return;
     }
+    document.querySelector(this.selector.pitchers).innerHTML = "Loading...";
     if (this.pitchers.template == null) {
-      document.querySelector(this.selector.pitchers).innerHTML = "Loading...";
       return;
     }
 
@@ -327,7 +329,6 @@ export class UI {
       }
     }
     if (typeof data.all[0].career_history[data.active_sort] !== "undefined") {
-      console.log("Sorting ERA!");
       data.all.sort((a, b) => {
         return parseFloat(a.career_history[data.active_sort]) > parseFloat(b.career_history[data.active_sort]) ? 1 : -1;
       });

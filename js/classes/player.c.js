@@ -97,7 +97,7 @@ export class Player {
       average = history.hits / history.batters;
     }
     if (history.innings_pitched > 0) {
-      era = history.runs_allowed / history.innings_pitched;
+      era = 9 * history.runs_allowed / history.innings_pitched;
     }
 
     this.career_history.defense.whip = whip.toFixed(3);

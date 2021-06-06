@@ -1,7 +1,7 @@
 export const settings = {
   game_count: 162,
   inning_count: 9,
-  real_time: true,
+  real_time: false,
   auto_new_day: true,
   base_runner_extra: false,
   required_outs: (() => document.querySelector("#required_outs").value)(),
